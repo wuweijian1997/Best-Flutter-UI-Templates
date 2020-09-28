@@ -21,11 +21,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 0));
-    return true;
-  }
-
   @override
   void dispose() {
     animationController.dispose();

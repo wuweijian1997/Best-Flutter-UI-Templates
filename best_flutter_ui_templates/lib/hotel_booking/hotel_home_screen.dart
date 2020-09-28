@@ -44,79 +44,73 @@ class _HotelHomeScreenState extends State<HotelHomeScreen>
   Widget build(BuildContext context) {
     return Theme(
       data: HotelAppTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          body: Stack(
+      child: Scaffold(
+        body: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Column(
             children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    getAppBarUI(),
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                return Column(
-                                  children: <Widget>[
-                                    getSearchBarUI(),
-                                    getTimeDateUI(),
-                                  ],
-                                );
-                              }, childCount: 1),
-                            ),
-                            SliverPersistentHeader(
-                              pinned: true,
-                              floating: true,
-                              delegate: ContestTabHeader(
-                                getFilterBarUI(),
-                              ),
-                            ),
-                          ];
-                        },
-                        body: Container(
-                          color:
-                              HotelAppTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: hotelList.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count =
-                                  hotelList.length > 10 ? 10 : hotelList.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController.forward();
-                              return HotelListView(
-                                callback: () {},
-                                hotelData: hotelList[index],
-                                animation: animation,
-                                animationController: animationController,
-                              );
-                            },
-                          ),
+              getAppBarUI(),
+              Expanded(
+                child: NestedScrollView(
+                  controller: _scrollController,
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                          return Column(
+                            children: <Widget>[
+                              getSearchBarUI(),
+                              getTimeDateUI(),
+                            ],
+                          );
+                        }, childCount: 1),
+                      ),
+                      SliverPersistentHeader(
+                        pinned: true,
+                        floating: true,
+                        delegate: ContestTabHeader(
+                          getFilterBarUI(),
                         ),
                       ),
-                    )
-                  ],
+                    ];
+                  },
+                  body: Container(
+                    color:
+                        HotelAppTheme.buildLightTheme().backgroundColor,
+                    child: ListView.builder(
+                      itemCount: hotelList.length,
+                      padding: const EdgeInsets.only(top: 8),
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        final int count =
+                            hotelList.length > 10 ? 10 : hotelList.length;
+                        final Animation<double> animation =
+                            Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                    parent: animationController,
+                                    curve: Interval(
+                                        (1 / count) * index, 1.0,
+                                        curve: Curves.fastOutSlowIn)));
+                        animationController.forward();
+                        return HotelListView(
+                          callback: () {},
+                          hotelData: hotelList[index],
+                          animation: animation,
+                          animationController: animationController,
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
