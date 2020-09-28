@@ -25,6 +25,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
   @override
   void initState() {
+    ///appBar动画,只有在动画的0 至 0.5会生效
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -156,11 +157,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
     );
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -181,28 +177,19 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
   }
 
   Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: listViews.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController.forward();
-              return listViews[index];
-            },
-          );
-        }
+    return ListView.builder(
+      controller: scrollController,
+      padding: EdgeInsets.only(
+        top: AppBar().preferredSize.height +
+            MediaQuery.of(context).padding.top +
+            24,
+        bottom: 62 + MediaQuery.of(context).padding.bottom,
+      ),
+      itemCount: listViews.length,
+      scrollDirection: Axis.vertical,
+      itemBuilder: (BuildContext context, int index) {
+        widget.animationController.forward();
+        return listViews[index];
       },
     );
   }
@@ -220,6 +207,8 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                     0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
+                    ///背景颜色 从 透明到白色动画过渡,由scrollController驱动
+                    ///滚动距离 0 -> 24 映射 颜色 白色透明 -> 白色
                     color: FitnessAppTheme.white.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(32.0),
